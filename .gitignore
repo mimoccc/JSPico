@@ -4,3 +4,5 @@
 /libs/
 JSPico.uf2
 filesystem.img
+filesystem.hex
+filesystem.hex.tmp

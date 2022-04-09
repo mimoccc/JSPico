@@ -1,4 +1,5 @@
 //--------------------------------------------------------------------------------------------------
+// Mass storage disc
 //--------------------------------------------------------------------------------------------------
 #include "bsp/board.h"
 #include "tusb.h"
@@ -51,9 +52,10 @@ void tud_msc_capacity_cb(uint8_t lun, uint32_t* block_count, uint16_t* block_siz
 bool tud_msc_start_stop_cb(uint8_t lun, uint8_t power_condition, bool start, bool load_eject) {
     (void) lun;
     (void) power_condition;
-    if ( load_eject ) {
+    if (load_eject) {
         if (start) {
             // load disk storage
+            ejected = false;
         } else {
             // unload disk storage
             ejected = true;
@@ -71,7 +73,7 @@ int32_t tud_msc_read10_cb(uint8_t lun, uint32_t lba, uint32_t offset, void* buff
     return (int32_t) bufsize;
 }
 //--------------------------------------------------------------------------------------------------
-bool tud_msc_is_writable_cb (uint8_t lun) {
+bool tud_msc_is_writable_cb(uint8_t lun) {
     (void) lun;
     #ifdef CFG_EXAMPLE_MSC_READONLY
     return false;
@@ -93,7 +95,7 @@ int32_t tud_msc_write10_cb(uint8_t lun, uint32_t lba, uint32_t offset, uint8_t* 
     return (int32_t) bufsize;
 }
 //--------------------------------------------------------------------------------------------------
-int32_t tud_msc_scsi_cb (uint8_t lun, uint8_t const scsi_cmd[16], void* buffer, uint16_t bufsize) {
+int32_t tud_msc_scsi_cb(uint8_t lun, uint8_t const scsi_cmd[16], void* buffer, uint16_t bufsize) {
     void const* response = NULL;
     int32_t resplen = 0;
     bool in_xfer = true;
