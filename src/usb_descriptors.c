@@ -1,10 +1,12 @@
+//--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 #include "tusb.h"
 #define _PID_MAP(itf, n)  ( (CFG_TUD_##itf) << (n) )
 #define USB_PID           (0x4000 | _PID_MAP(CDC, 0) | _PID_MAP(MSC, 1) | _PID_MAP(HID, 2) | \
                            _PID_MAP(MIDI, 3) | _PID_MAP(VENDOR, 4) )
 #define USB_VID   0xCafe
 #define USB_BCD   0x0200
-
+//--------------------------------------------------------------------------------------------------
 tusb_desc_device_t const desc_device = {
   .bLength            = sizeof(tusb_desc_device_t),
   .bDescriptorType    = TUSB_DESC_DEVICE,
@@ -21,18 +23,18 @@ tusb_desc_device_t const desc_device = {
   .iSerialNumber      = 0x03,
   .bNumConfigurations = 0x01
 };
-
+//--------------------------------------------------------------------------------------------------
 uint8_t const * tud_descriptor_device_cb(void) {
   return (uint8_t const *) &desc_device;
 }
-
+//--------------------------------------------------------------------------------------------------
 enum {
   ITF_NUM_CDC = 0,
   ITF_NUM_CDC_DATA,
   ITF_NUM_MSC,
   ITF_NUM_TOTAL
 };
-
+//--------------------------------------------------------------------------------------------------
 #if CFG_TUSB_MCU == OPT_MCU_LPC175X_6X || CFG_TUSB_MCU == OPT_MCU_LPC177X_8X || CFG_TUSB_MCU == OPT_MCU_LPC40XX
   #define EPNUM_CDC_NOTIF   0x81
   #define EPNUM_CDC_OUT     0x02
@@ -64,7 +66,7 @@ enum {
   #define EPNUM_MSC_OUT     0x03
   #define EPNUM_MSC_IN      0x83
 #endif
-
+//--------------------------------------------------------------------------------------------------
 #define CONFIG_TOTAL_LEN    (TUD_CONFIG_DESC_LEN + TUD_CDC_DESC_LEN + TUD_MSC_DESC_LEN)
 uint8_t const desc_fs_configuration[] = {
   TUD_CONFIG_DESCRIPTOR(1, ITF_NUM_TOTAL, 0, CONFIG_TOTAL_LEN, 0x00, 100),
@@ -72,15 +74,15 @@ uint8_t const desc_fs_configuration[] = {
   TUD_MSC_DESCRIPTOR(ITF_NUM_MSC, 5, EPNUM_MSC_OUT, EPNUM_MSC_IN, 64),
 };
 #if TUD_OPT_HIGH_SPEED
-
+//--------------------------------------------------------------------------------------------------
 uint8_t const desc_hs_configuration[] = {
   TUD_CONFIG_DESCRIPTOR(1, ITF_NUM_TOTAL, 0, CONFIG_TOTAL_LEN, 0x00, 100),
   TUD_CDC_DESCRIPTOR(ITF_NUM_CDC, 4, EPNUM_CDC_NOTIF, 8, EPNUM_CDC_OUT, EPNUM_CDC_IN, 512),
   TUD_MSC_DESCRIPTOR(ITF_NUM_MSC, 5, EPNUM_MSC_OUT, EPNUM_MSC_IN, 512),
 };
-
+//--------------------------------------------------------------------------------------------------
 uint8_t desc_other_speed_config[CONFIG_TOTAL_LEN];
-
+//--------------------------------------------------------------------------------------------------
 tusb_desc_device_qualifier_t const desc_device_qualifier = {
   .bLength            = sizeof(tusb_desc_device_qualifier_t),
   .bDescriptorType    = TUSB_DESC_DEVICE_QUALIFIER,
@@ -92,11 +94,11 @@ tusb_desc_device_qualifier_t const desc_device_qualifier = {
   .bNumConfigurations = 0x01,
   .bReserved          = 0x00
 };
-
+//--------------------------------------------------------------------------------------------------
 uint8_t const* tud_descriptor_device_qualifier_cb(void) {
   return (uint8_t const*) &desc_device_qualifier;
 }
-
+//--------------------------------------------------------------------------------------------------
 uint8_t const* tud_descriptor_other_speed_configuration_cb(uint8_t index) {
   (void) index;
   memcpy(desc_other_speed_config,
@@ -114,7 +116,7 @@ uint8_t const * tud_descriptor_configuration_cb(uint8_t index) {
   return desc_fs_configuration;
 #endif
 }
-
+//--------------------------------------------------------------------------------------------------
 char const* string_desc_arr [] = {
   (const char[]) { 0x09, 0x04 }, // 0: is supported language is English (0x0409)
   "mjdev",                       // 1: Manufacturer
@@ -123,9 +125,9 @@ char const* string_desc_arr [] = {
   "PicoJS CDC",                  // 4: CDC Interface
   "PicoJS MSC",                  // 5: MSC Interface
 };
-
+//--------------------------------------------------------------------------------------------------
 static uint16_t _desc_str[32];
-
+//--------------------------------------------------------------------------------------------------
 uint16_t const* tud_descriptor_string_cb(uint8_t index, uint16_t langid) {
   (void) langid;
   uint8_t chr_count;
@@ -145,3 +147,4 @@ uint16_t const* tud_descriptor_string_cb(uint8_t index, uint16_t langid) {
   _desc_str[0] = (TUSB_DESC_STRING << 8 ) | (2*chr_count + 2);
   return _desc_str;
 }
+//--------------------------------------------------------------------------------------------------
