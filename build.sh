@@ -31,6 +31,9 @@ PICOUSBIOBOARD_LIB_REPO="https://github.com/notro/pico-usb-io-board.git"
 # circuitpython project
 CIRCUITPYTHON_LIB="$LIBS_FOLDER/circuitpython"
 CIRCUITPYTHON_LIB_REPO="https://github.com/adafruit/circuitpython.git"
+# jerry script
+JERRYSCRIPT_LIB="$LIBS_FOLDER/jerryscript"
+JERRYSCRIPT_LIB_REPO="https://github.com/kaluma-project/jerryscript.git"
 ####################################################################################################
 # MAIN
 ####################################################################################################
@@ -138,11 +141,24 @@ else
     git clone $CIRCUITPYTHON_LIB_REPO
     cd "$OLD_DIR" || exit
 fi
+# check jerry script source
+if [ -d "$JERRYSCRIPT_LIB" ]; then
+    echo "Library jerryscript - OK."
+else
+    echo "Downloading library jerryscript."
+    OLD_DIR=$(pwd)
+    cd "$LIBS_FOLDER" || exit
+    git clone $JERRYSCRIPT_LIB_REPO
+    cd "$OLD_DIR" || exit
+    cd "$JERRYSCRIPT_LIB" || exit
+    git submodule update --init
+    cd "$OLD_DIR" || exit
+fi
 # prepare empty build dir
 echo "Preparing empty build dir."
 rm -rf build
 mkdir -p build
-./create-data.sh
+#./create-data.sh
 # go to build dir
 cd build || exit
 # prepare environment
