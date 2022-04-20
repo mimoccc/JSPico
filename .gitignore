@@ -6,3 +6,5 @@ JSPico.uf2
 filesystem.img
 filesystem.hex
 filesystem.hex.tmp
+/cmake-build-debug/
+/cmake-build-debug
