@@ -9,42 +9,48 @@
 #define STRING_BYTE_SIZE(a) (sizeof(a) - 1)
 #define packed __attribute__((__packed__))
 //------------------------------------------------------------------------------
-#define DISK_SIZE 16384
+// virtual disk size in KB
+#define DISK_SIZE (32 * 1024)
+// virtual disk block size, default fat 512
 #define DISK_BLOCK_SIZE 512
+// virtual disc sectors
 #define DISK_BLOCK_NUM (DISK_SIZE / DISK_BLOCK_SIZE)
+// virtual disk volume label
 #define DISK_NAME "PicoJS    "
 //------------------------------------------------------------------------------
-// BOOTSTRAP jump
+// bootstrap jump
 #define D_BIOS_JUMP_CODE { 0xeb, 0x3c, 0x90 }
 // just label of creator , can be anything
 #define D_BIOS_CREATOR "MJDev   "
-// 512, 1024, 2048, 4096 bytes per sector
+// bytes per sector 512, 1024, 2048, 4096
 #define D_BIOS_BPS DISK_BLOCK_SIZE
-// 1, 2, 4, 8, 16, 32, 64, 128 sectors per cluster
+// sectors per cluster 1, 2, 4, 8, 16, 32, 64, 128
 #define D_BIOS_SPC 1
 // reserved sectors (fat12=1, Fat16 = 1, FAT32=32)
 #define D_BIOS_RS 1
 // fat copies, 1
 #define D_BIOS_FAT_CNT 1
-// root dir entries (224 default, fat32-0, fat16-512)
+// root dir entry default size
 #define D_BIOS_RDE_ITEM_SIZE 32
+// root dir entries (224 default, fat32-0, fat16-512)
 #define D_BIOS_MAX_ROOT_DE 16
+// root dir komplete size
 #define D_BIOS_RDE_SIZE (D_BIOS_MAX_ROOT_DE*D_BIOS_RDE_ITEM_SIZE)
-// Total number of sectors in the filesystem 2880, in case the partition is not
+// total number of sectors in the filesystem 2880, in case the partition is not
 // FAT32 and smaller than 32 MB.
 #define D_BIOS_TOTAL_SECTORS (DISK_SIZE/DISK_BLOCK_SIZE)
-// Media descriptor type (f0: 1.4 MB floppy, f8: hard disk; see below)
+// media descriptor type (f0: 1.4 MB floppy, f8: hard disk; see below)
 #define D_BIOS_RES_1 0xf8
-// Number of sectors per FAT (9), 0 for FAT32.
+// number of sectors per FAT (9), 0 for FAT32.
 #define D_BIOS_SECS_PER_FAT 1
-// Number of sectors per track (12)
+// number of sectors per track (12)
 #define D_BIOS_SECS_PER_TRACK 16
-// Number of heads (2, for a double-sided diskette)
+// number of heads (2, for a double-sided diskette)
 #define D_BIOS_HEADS 1
-// Number of hidden sectors (0)
-#define D_BIOS_RES_2 { 0x00, 0x00, 0x00, 0x00 }
+// number of hidden sectors (0)
+#define D_BIOS_RES_2 0
 // total sectors per fat
-#define D_BIOS_TOT_SECS_PER_FAT { 0x00, 0x00, 0x00, 0x00 }
+#define D_BIOS_TOT_SECS_PER_FAT 0
 // Logical Drive Number 0x0080 default, bts
 #define D_BIOS_RES_3 0x0080
 // boot signature
@@ -54,7 +60,7 @@
 // volume label, max 11 chars
 #define D_BIOS_VOLUME_LABEL DISK_NAME
 // file system type, should be FAT12, FAT16 or FAT32, ...
-#define D_BIOS_FS_TYPE { 0x46, 0x41, 0x54, 0x31, 0x32, 0x20, 0x20, 0x20 }
+#define D_BIOS_FS_TYPE "FAT12   "
 // boot sector end signature
 #define D_BOOT_SECTOR_SIGN 0xaa55
 // test file
@@ -93,11 +99,11 @@ typedef struct {
     uint16_t BIOS_SECS_PER_FAT;
     uint16_t BIOS_SECS_PER_TRACK;
     uint16_t BIOS_HEADS;
-    uint8_t BIOS_RESERVED_2[4];
-    uint8_t BIOS_TOTAL_SECS_PER_FAT[4];
+    uint32_t BIOS_RESERVED_2;
+    uint32_t BIOS_TOTAL_SECS_PER_FAT;
     uint16_t BIOS_RESERVED_3;
     uint8_t BIOS_BOOT_SIGN;
-    uint8_t BIOS_VOLUME_ID[4];
+    uint32_t BIOS_VOLUME_ID;
     uint8_t BIOS_VOLUME_LABEL[11];
     uint8_t BIOS_FS_TYPE[8];
     uint8_t BOOT_CODE[448];
