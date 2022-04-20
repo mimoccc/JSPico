@@ -50,7 +50,7 @@ enum {
     DISK_BLOCK_SIZE = $DISK_BLOCK_SIZE
 };
 //--------------------------------------------------------------------------------------------------
-const char DEV_NAME[] = \"PicoJS     \";
+const char DEV_NAME[] = \"JSPico     \";
 const int DISK_SIZE = DISK_BLOCK_NUM * DISK_BLOCK_SIZE;
 //--------------------------------------------------------------------------------------------------
 uint8_t msc_disk[DISK_BLOCK_NUM][DISK_BLOCK_SIZE] = {

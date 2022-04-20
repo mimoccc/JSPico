@@ -16,7 +16,7 @@
 // virtual disc sectors
 #define DISK_BLOCK_NUM (DISK_SIZE / DISK_BLOCK_SIZE)
 // virtual disk volume label
-#define DISK_NAME "PicoJS    "
+#define DISK_NAME "JSPico    "
 //------------------------------------------------------------------------------
 // bootstrap jump
 #define D_BIOS_JUMP_CODE { 0xeb, 0x3c, 0x90 }
