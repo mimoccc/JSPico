@@ -10,13 +10,11 @@
 //-----------------------------------------------------------------------------
 #if CFG_TUD_MSC
 //-----------------------------------------------------------------------------
-// Disc data
+// disc data
 #include "msc_disk_data.c"
 //-----------------------------------------------------------------------------
-// Eject state
+// eject state
 static bool ejected = false;
-// buffer
-char vfs_buff[4096] = {};
 //-----------------------------------------------------------------------------
 void tud_msc_inquiry_cb(
     uint8_t lun, 
@@ -25,13 +23,9 @@ void tud_msc_inquiry_cb(
     uint8_t product_rev[4]
 ) {
     (void) lun;
-    char vid[] = "MJDEV      ";
-    const char pid[] = "Mass Storage";
-    const char rev[] = "1.0";
-    memcpy(vid, DISK_NAME, strlen(DISK_NAME));
-    memcpy(vendor_id  , vid, strlen(vid));
-    memcpy(product_id , pid, strlen(pid));
-    memcpy(product_rev, rev, strlen(rev));
+    memcpy(vendor_id  , DEV_USB_VID, strlen(DEV_USB_VID));
+    memcpy(product_id , DEV_USB_PID, strlen(DEV_USB_PID));
+    memcpy(product_rev, DEV_USB_REV, strlen(DEV_USB_REV));
 }
 //-----------------------------------------------------------------------------
 bool tud_msc_test_unit_ready_cb(uint8_t lun) {

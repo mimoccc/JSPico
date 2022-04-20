@@ -12,7 +12,7 @@
 // virtual disk size in KB
 #define DISK_SIZE (32 * 1024)
 // virtual disk block size, default fat 512
-#define DISK_BLOCK_SIZE 512
+#define DISK_BLOCK_SIZE VIRTUAL_SEC_SIZE
 // virtual disc sectors
 #define DISK_BLOCK_NUM (DISK_SIZE / DISK_BLOCK_SIZE)
 // virtual disk volume label
@@ -103,7 +103,7 @@ typedef struct {
     uint32_t BIOS_TOTAL_SECS_PER_FAT;
     uint16_t BIOS_RESERVED_3;
     uint8_t BIOS_BOOT_SIGN;
-    uint32_t BIOS_VOLUME_ID;
+    uint8_t BIOS_VOLUME_ID[4];
     uint8_t BIOS_VOLUME_LABEL[11];
     uint8_t BIOS_FS_TYPE[8];
     uint8_t BOOT_CODE[448];
