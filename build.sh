@@ -34,6 +34,9 @@ TINYUSB_LIB_REPO="https://github.com/hathach/tinyusb.git"
 # jerry script
 JERRYSCRIPT_LIB="$LIBS_FOLDER/jerryscript"
 JERRYSCRIPT_LIB_REPO="https://github.com/kaluma-project/jerryscript.git"
+# emulator
+EMULATOR_LIN="$LIBS_FOLDER/rp2040js"
+EMULATOR_LIB_REPO="https://github.com/wokwi/rp2040js.git"
 ####################################################################################################
 # MAIN
 ####################################################################################################
@@ -154,6 +157,19 @@ else
     git clone $JERRYSCRIPT_LIB_REPO
     cd "$OLD_DIR" || exit
     cd "$JERRYSCRIPT_LIB" || exit
+    git submodule update --init
+    cd "$OLD_DIR" || exit
+fi
+# check emulator source
+if [ -d "$EMULATOR_LIB" ]; then
+    echo "Emulator - OK."
+else
+    echo "Downloading emulator."
+    OLD_DIR=$(pwd)
+    cd "$LIBS_FOLDER" || exit
+    git clone $EMULATOR_LIB_REPO
+    cd "$OLD_DIR" || exit
+    cd "$EMULATOR_LIB" || exit
     git submodule update --init
     cd "$OLD_DIR" || exit
 fi
