@@ -14,23 +14,23 @@ PICO_SDK_REPO="https://github.com/raspberrypi/pico-sdk.git"
 TINYUSB_LIB="$LIBS_FOLDER/tinyusb"
 TINYUSB_LIB_REPO="https://github.com/hathach/tinyusb.git"
 # lwip
-LWIP_LIB="$LIBS_FOLDER/lwip"
-LWIP_LIB_REPO="https://git.savannah.nongnu.org/git/lwip.git"
+#LWIP_LIB="$LIBS_FOLDER/lwip"
+#LWIP_LIB_REPO="https://git.savannah.nongnu.org/git/lwip.git"
 # fatfs oop
-OOFATFS_LIB="$LIBS_FOLDER/oofatfs"
-OOFATFS_LIB_REPO="https://github.com/micropython/oofatfs.git"
+#OOFATFS_LIB="$LIBS_FOLDER/oofatfs"
+#OOFATFS_LIB_REPO="https://github.com/micropython/oofatfs.git"
 # kaluma
-KALUMA_LIB="$LIBS_FOLDER/kaluma"
-KALUMA_LIB_REPO="https://github.com/kaluma-project/kaluma.git"
+#KALUMA_LIB="$LIBS_FOLDER/kaluma"
+#KALUMA_LIB_REPO="https://github.com/kaluma-project/kaluma.git"
 # web server
-PICOWEB_LIB="$LIBS_FOLDER/pico-webserver"
-PICOWEB_LIB_REPO="https://github.com/maxnet/pico-webserver.git"
+#PICOWEB_LIB="$LIBS_FOLDER/pico-webserver"
+#PICOWEB_LIB_REPO="https://github.com/maxnet/pico-webserver.git"
 # usb board
-PICOUSBIOBOARD_LIB="$LIBS_FOLDER/pico-usb-io-board"
-PICOUSBIOBOARD_LIB_REPO="https://github.com/notro/pico-usb-io-board.git"
+#PICOUSBIOBOARD_LIB="$LIBS_FOLDER/pico-usb-io-board"
+#PICOUSBIOBOARD_LIB_REPO="https://github.com/notro/pico-usb-io-board.git"
 # circuitpython project
-CIRCUITPYTHON_LIB="$LIBS_FOLDER/circuitpython"
-CIRCUITPYTHON_LIB_REPO="https://github.com/adafruit/circuitpython.git"
+#CIRCUITPYTHON_LIB="$LIBS_FOLDER/circuitpython"
+#CIRCUITPYTHON_LIB_REPO="https://github.com/adafruit/circuitpython.git"
 # jerry script
 JERRYSCRIPT_LIB="$LIBS_FOLDER/jerryscript"
 JERRYSCRIPT_LIB_REPO="https://github.com/kaluma-project/jerryscript.git"
@@ -69,78 +69,81 @@ else
     git submodule update --init
     cd "$OLD_DIR" || exit
 fi
-# Check library lwip
-if [ -d "$LWIP_LIB" ]; then
-    echo "Library lwip - OK."
-else
-    echo "Downloading library lwip."
-    OLD_DIR=$(pwd)
-    cd "$LIBS_FOLDER" || exit
-    git clone $LWIP_LIB_REPO
-    cd "$OLD_DIR" || exit
-    cd "$LWIP_LIB" || exit
-    git submodule update --init
-    cd "$OLD_DIR" || exit
-fi
 # Check library oofatfs
-if [ -d "$OOFATFS_LIB" ]; then
-    echo "Library oofatfs - OK."
-else
-    echo "Downloading library oofatfs."
-    OLD_DIR=$(pwd)
-    cd "$LIBS_FOLDER" || exit
-    git clone $OOFATFS_LIB_REPO
-    cd "$OLD_DIR" || exit
-fi
+#if [ -d "$OOFATFS_LIB" ]; then
+#    echo "Library oofatfs - OK."
+#else
+#    echo "Downloading library oofatfs."
+#    OLD_DIR=$(pwd)
+#    cd "$LIBS_FOLDER" || exit
+#    git clone $OOFATFS_LIB_REPO
+#    cd "$OLD_DIR" || exit
+#    cd "$OOFATFS_LIB" || exit
+#    git submodule update --init
+#    cd "$OLD_DIR" || exit
+#fi
+# Check library lwip
+#if [ -d "$LWIP_LIB" ]; then
+#    echo "Library lwip - OK."
+#else
+#    echo "Downloading library lwip."
+#    OLD_DIR=$(pwd)
+#    cd "$LIBS_FOLDER" || exit
+#    git clone $LWIP_LIB_REPO
+#    cd "$OLD_DIR" || exit
+#    cd "$LWIP_LIB" || exit
+#    git submodule update --init
+#    cd "$OLD_DIR" || exit
+#fi
 # Check project kaluma
-if [ -d "$KALUMA_LIB" ]; then
-    echo "Library kaluma - OK."
-else
-    echo "Downloading library kaluma."
-    OLD_DIR=$(pwd)
-    cd "$LIBS_FOLDER" || exit
-    git clone $KALUMA_LIB_REPO
-    cd "$OLD_DIR" || exit
-    cd "$KALUMA_LIB" || exit
-    git submodule update --init
-    cd "$OLD_DIR" || exit
-fi
+#if [ -d "$KALUMA_LIB" ]; then
+#    echo "Library kaluma - OK."
+#else
+#    echo "Downloading library kaluma."
+#    OLD_DIR=$(pwd)
+#    cd "$LIBS_FOLDER" || exit
+#    git clone $KALUMA_LIB_REPO
+#    cd "$OLD_DIR" || exit
+#    cd "$KALUMA_LIB" || exit
+#    git submodule update --init
+#    cd "$OLD_DIR" || exit
+#fi
 # Check project pico-web-server
-if [ -d "$PICOWEB_LIB" ]; then
-    echo "Library picoweb - OK."
-else
-    echo "Downloading library picoweb."
-    OLD_DIR=$(pwd)
-    cd "$LIBS_FOLDER" || exit
-    git clone $PICOWEB_LIB_REPO
-    cd "$OLD_DIR" || exit
-    cd "$PICOWEB_LIB" || exit
-    git submodule update --init
-    cd "$OLD_DIR" || exit
-fi
+#if [ -d "$PICOWEB_LIB" ]; then
+#    echo "Library picoweb - OK."
+#else
+#    echo "Downloading library picoweb."
+#    OLD_DIR=$(pwd)
+#    cd "$LIBS_FOLDER" || exit
+#    git clone $PICOWEB_LIB_REPO
+#    cd "$OLD_DIR" || exit
+#    cd "$PICOWEB_LIB" || exit
+#    git submodule update --init
+#    cd "$OLD_DIR" || exit
+#fi
 # check project pico usb io board
-if [ -d "$PICOUSBIOBOARD_LIB" ]; then
-    echo "Library picousb - OK."
-else
-    echo "Downloading library picousb."
-    OLD_DIR=$(pwd)
-    cd "$LIBS_FOLDER" || exit
-    git clone $PICOUSBIOBOARD_LIB_REPO
-    cd "$OLD_DIR" || exit
-    cd "$PICOUSBIOBOARD_LIB" || exit
-    git submodule update --init
-    cd "$OLD_DIR" || exit
-fi
+#if [ -d "$PICOUSBIOBOARD_LIB" ]; then
+#    echo "Library picousb - OK."
+#else
+#    echo "Downloading library picousb."
+#    OLD_DIR=$(pwd)
+#    cd "$LIBS_FOLDER" || exit
+#    git clone $PICOUSBIOBOARD_LIB_REPO
+#    cd "$OLD_DIR" || exit
+#    cd "$PICOUSBIOBOARD_LIB" || exit
+#    git submodule update --init
+#    cd "$OLD_DIR" || exit
+#fi
 # check project circuitpython
-if [ -d "$CIRCUITPYTHON_LIB" ]; then
-    echo "Library circuitpython - OK."
-else
-    echo "Downloading library circuitpython."
-    OLD_DIR=$(pwd)
-    cd "$LIBS_FOLDER" || exit
-    git clone $CIRCUITPYTHON_LIB_REPO
-    cd "$OLD_DIR" || exit
-fi
+#if [ -d "$CIRCUITPYTHON_LIB" ]; then
+#    echo "Library circuitpython - OK."
+#else
+#    echo "Downloading library circuitpython."
+#    OLD_DIR=$(pwd)
+#    cd "$LIBS_FOLDER" || exit
+#    git clone $CIRCUITPYTHON_LIB_REPO
+#    cd "$OLD_DIR" || exit
+#fi
 # check jerry script source
 if [ -d "$JERRYSCRIPT_LIB" ]; then
     echo "Library jerryscript - OK."

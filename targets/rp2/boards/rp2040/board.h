@@ -1,6 +1,15 @@
 #ifndef __RP2_PICO_H
 #define __RP2_PICO_H
 
+// virtual disk size in KB
+#define DISK_SIZE_KB 128
+// virtual disc size
+#define DISK_SIZE (DISK_SIZE_KB * 1024)
+// virtual disk block size, default fat 512
+#define DISK_BLOCK_SIZE 512
+// virtual disc sectors
+#define DISK_BLOCK_NUM (DISK_SIZE / DISK_BLOCK_SIZE)
+
 // system
 #define SYSTEM_ARCH     "cortex-m0-plus"
 #define SYSTEM_PLATFORM "rp2"
