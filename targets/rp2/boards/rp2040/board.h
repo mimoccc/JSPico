@@ -23,7 +23,7 @@
 #define BINARY_MAX  BINARY_SIZE
 
 // usb
-#define DEV_USB_VID "JSPico      "
+#define DEV_USB_VID "JSPico     "
 #define DEV_USB_PID "Mass Storage"
 #define DEV_USB_REV "1.0 (C) 2022"
 
