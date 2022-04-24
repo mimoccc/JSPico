@@ -64,16 +64,16 @@ bool disk_prepare() {
         if (res == FR_OK) {
             res = f_setlabel(DEV_USB_VID);
             if (res == FR_OK) {
-                //res = f_open(&fil, "welcome.txt", FA_CREATE_NEW | FA_WRITE);
+                res = f_open(&fil, "welcome.txt", FA_CREATE_NEW | FA_WRITE);
                 if (res == FR_OK) {
-                    //f_write(&fil, "Hello, World!\r\n", 15, &bw);
-                    //f_close(&fil);
+                    f_write(&fil, "Hello, World!\r\n", 15, &bw);
+                    f_close(&fil);
                 }
             }
-//            f_mount(0, "", 0);
+            f_mount(0, "", 0);
         }
     }
-    return true;//res == 0;
+    return res == 0;
 }
 
 //-----------------------------------------------------------------------------
