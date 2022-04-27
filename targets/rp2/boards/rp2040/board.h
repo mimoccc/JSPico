@@ -26,6 +26,10 @@
 #define DEV_USB_VID "JSPico     "
 #define DEV_USB_PID "Mass Storage"
 #define DEV_USB_REV "1.0 (C) 2022"
+#define DEV_DEV_DIR "dev"
+#define DEV_GPIO_DIR "gpio"
+#define DEV_GPIO_TMP "/" DEV_DEV_DIR "/" DEV_GPIO_DIR
+#define DEV_BOOT_FILE "/" DEV_DEV_DIR "/boot"
 
 // flash rom
 #define ROM_FLASH_OFFSET       BINARY_MAX

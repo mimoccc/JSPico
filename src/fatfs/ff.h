@@ -17,8 +17,6 @@
 / by use of this software.
 /
 /----------------------------------------------------------------------------*/
-
-
 #ifndef FF_DEFINED
 #define FF_DEFINED	89352	/* Revision ID */
 
@@ -33,10 +31,7 @@ extern "C" {
 #error Wrong configuration file (ffconf.h).
 #endif
 
-
-
 /* Definitions of volume management */
-
 #if FF_MULTI_PARTITION		/* Multiple partition configuration */
 typedef struct {
 	BYTE pd;	/* Physical drive number */
@@ -45,10 +40,7 @@ typedef struct {
 extern PARTITION VolToPart[];	/* Volume - Partition resolution table */
 #endif
 
-
-
 /* Type of path name strings on FatFs API */
-
 #ifndef _INC_TCHAR
 #define _INC_TCHAR
 
@@ -70,20 +62,14 @@ typedef char TCHAR;
 
 #endif
 
-
-
 /* Type of file size variables */
-
 #if FF_FS_EXFAT
 typedef QWORD FSIZE_t;
 #else
 typedef DWORD FSIZE_t;
 #endif
 
-
-
 /* Filesystem object structure (FATFS) */
-
 typedef struct {
 	BYTE	fs_type;		/* Filesystem type (0:N/A) */
 	BYTE	pdrv;			/* Physical drive number */
@@ -127,10 +113,7 @@ typedef struct {
 	BYTE	win[FF_MAX_SS];	/* Disk access window for Directory, FAT (and file data at tiny cfg) */
 } FATFS;
 
-
-
 /* Object ID and allocation information (FFOBJID) */
-
 typedef struct {
 	FATFS*	fs;				/* Pointer to the hosting volume of this object */
 	WORD	id;				/* Hosting volume mount ID */
@@ -150,10 +133,7 @@ typedef struct {
 #endif
 } FFOBJID;
 
-
-
 /* File object structure (FIL) */
-
 typedef struct {
 	FFOBJID	obj;			/* Object identifier (must be the 1st member to detect invalid object pointer) */
 	BYTE	flag;			/* File status flags */
@@ -173,10 +153,7 @@ typedef struct {
 #endif
 } FIL;
 
-
-
 /* Directory object structure (DIR) */
-
 typedef struct {
 	FFOBJID	obj;			/* Object identifier */
 	DWORD	dptr;			/* Current read/write offset */
@@ -192,10 +169,7 @@ typedef struct {
 #endif
 } DIR;
 
-
-
 /* File information structure (FILINFO) */
-
 typedef struct {
 	FSIZE_t	fsize;			/* File size */
 	WORD	fdate;			/* Modified date */
@@ -209,10 +183,7 @@ typedef struct {
 #endif
 } FILINFO;
 
-
-
 /* File function return code (FRESULT) */
-
 typedef enum {
 	FR_OK = 0,				/* (0) Succeeded */
 	FR_DISK_ERR,			/* (1) A hard error occurred in the low level disk I/O layer */
@@ -236,11 +207,8 @@ typedef enum {
 	FR_INVALID_PARAMETER	/* (19) Given parameter is invalid */
 } FRESULT;
 
-
-
 /*--------------------------------------------------------------*/
 /* FatFs module application interface                           */
-
 FRESULT f_open (FIL* fp, const TCHAR* path, BYTE mode);				/* Open or create a file */
 FRESULT f_close (FIL* fp);											/* Close an open file object */
 FRESULT f_read (FIL* fp, void* buff, UINT btr, UINT* br);			/* Read data from the file */
@@ -289,9 +257,6 @@ TCHAR* f_gets (TCHAR* buff, int len, FIL* fp);						/* Get a string from the fil
 #define EOF (-1)
 #endif
 
-
-
-
 /*--------------------------------------------------------------*/
 /* Additional user defined functions                            */
 
@@ -319,13 +284,8 @@ void ff_rel_grant (FF_SYNC_t sobj);		/* Unlock sync object */
 int ff_del_syncobj (FF_SYNC_t sobj);	/* Delete a sync object */
 #endif
 
-
-
-
 /*--------------------------------------------------------------*/
 /* Flags and offset address                                     */
-
-
 /* File access mode and open method flags (3rd argument of f_open) */
 #define	FA_READ				0x01
 #define	FA_WRITE			0x02
@@ -357,7 +317,6 @@ int ff_del_syncobj (FF_SYNC_t sobj);	/* Delete a sync object */
 #define	AM_SYS	0x04	/* System */
 #define AM_DIR	0x10	/* Directory */
 #define AM_ARC	0x20	/* Archive */
-
 
 #ifdef __cplusplus
 }

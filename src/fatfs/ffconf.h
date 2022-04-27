@@ -31,7 +31,7 @@
 /* This option switches fast seek function. (0:Disable or 1:Enable) */
 #define FF_USE_EXPAND	0
 /* This option switches f_expand function. (0:Disable or 1:Enable) */
-#define FF_USE_CHMOD	0
+#define FF_USE_CHMOD	1
 /* This option switches attribute manipulation functions, f_chmod() and f_utime().
 /  (0:Disable or 1:Enable) Also FF_FS_READONLY needs to be 0 to enable this option. */
 #define FF_USE_LABEL	1
@@ -42,7 +42,7 @@
 /*---------------------------------------------------------------------------/
 / Locale and Namespace Configurations
 /---------------------------------------------------------------------------*/
-#define FF_CODE_PAGE	932
+#define FF_CODE_PAGE	437
 /* This option specifies the OEM code page to be used on the target system.
 /  Incorrect code page setting can cause a file open failure.
 /   437 - U.S.
@@ -106,7 +106,7 @@
 /   2: Unicode in UTF-16BE
 /   3: Unicode in UTF-8
 */
-#define FF_FS_RPATH		0
+#define FF_FS_RPATH		    2
 /* This option configures support for relative path.
 /   0: Disable relative path and remove related functions.
 /   1: Enable relative path. f_chdir() and f_chdrive() are available.
@@ -114,7 +114,7 @@
 /*---------------------------------------------------------------------------/
 / Drive/Volume Configurations
 /---------------------------------------------------------------------------*/
-#define FF_VOLUMES		2
+#define FF_VOLUMES		    8
 /* Number of volumes (logical drives) to be used. (1-10) */
 #define FF_STR_VOLUME_ID	0
 #define FF_VOLUME_STRS		"RAM","NAND","CF","SD","SD2","USB","USB2","USB3"
@@ -166,7 +166,7 @@
 #define FF_FS_NORTC		1
 #define FF_NORTC_MON	1
 #define FF_NORTC_MDAY	1
-#define FF_NORTC_YEAR	2017
+#define FF_NORTC_YEAR	2022
 /* The option FF_FS_NORTC switches timestamp functiton. If the system does not have
 /  any RTC function or valid timestamp is not needed, set FF_FS_NORTC = 1 to disable
 /  the timestamp function. All objects modified by FatFs will have a fixed timestamp

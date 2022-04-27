@@ -45,16 +45,12 @@ echo "
 #include <stdint.h>
 #include <stdbool.h>
 //--------------------------------------------------------------------------------------------------
-enum {
-    DISK_BLOCK_NUM  = $DISK_BLOCK_NUM,
-    DISK_BLOCK_SIZE = $DISK_BLOCK_SIZE
-};
-//--------------------------------------------------------------------------------------------------
-const char DEV_NAME[] = \"JSPico     \";
-const int DISK_SIZE = DISK_BLOCK_NUM * DISK_BLOCK_SIZE;
-//--------------------------------------------------------------------------------------------------
-uint8_t msc_disk[DISK_BLOCK_NUM][DISK_BLOCK_SIZE] = {
-$HEXDATA
+// static files
+static S_FILE static_files[1] = {
+        {
+                .name    = "welcome.txt",
+                .content = "Hello, World!\r\n"
+        }
 };
 //--------------------------------------------------------------------------------------------------
 " > $CREATE_FILE

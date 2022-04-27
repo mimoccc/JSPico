@@ -38,6 +38,9 @@ add_executable(
 target_sources(${PROJECT} PUBLIC
         ${FATFS_DIR}/ff.c
         ${FATFS_DIR}/diskio.c
+        # ${PICO_SDK_PATH}/src/rp2_common/pico_multicore/multicore.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/hw/led.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/boot/boot.c
         ${CMAKE_CURRENT_SOURCE_DIR}/src/msc/msc_disk.c
         ${CMAKE_CURRENT_SOURCE_DIR}/src/usb/usb_descriptors.c
         ${CMAKE_CURRENT_SOURCE_DIR}/src/flash/flash.c
@@ -48,9 +51,12 @@ target_include_directories(${PROJECT} PUBLIC
         ${TARGET_INC_DIR}
         ${BOARD_DIR}
         ${CMAKE_CURRENT_SOURCE_DIR}/src
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/hw
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/boot
         ${CMAKE_CURRENT_SOURCE_DIR}/src/fatfs
         ${CMAKE_CURRENT_SOURCE_DIR}/src/msc
         ${CMAKE_CURRENT_SOURCE_DIR}/src/usb
+        # ${PICO_SDK_PATH}/src/rp2_common/pico_multicore/include
         ${PICO_SDK_PATH}/src/rp2_common/hardware_flash/include
         ${PICO_SDK_PATH}/src/rp2_common/hardware_gpio/include
 )
