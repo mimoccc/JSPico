@@ -24,6 +24,8 @@ void set_led_blink_interval(uint32_t blink_interval_ms) {
     blink_interval = blink_interval_ms;
 }
 
+//-----------------------------------------------------------------------------
+
 void led_task() {
     if (blink_interval != BLINK_NONE) {
         static uint32_t start_ms = 0;
@@ -36,9 +38,13 @@ void led_task() {
     }
 }
 
+//-----------------------------------------------------------------------------
+
 void led_on() {
     board_led_write(1);
 }
+
+//-----------------------------------------------------------------------------
 
 void led_off() {
     board_led_write(0);

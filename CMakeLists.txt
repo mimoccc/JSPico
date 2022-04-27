@@ -44,6 +44,7 @@ target_sources(${PROJECT} PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/src/msc/msc_disk.c
         ${CMAKE_CURRENT_SOURCE_DIR}/src/usb/usb_descriptors.c
         ${CMAKE_CURRENT_SOURCE_DIR}/src/flash/flash.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/fs_data.c
         ${CMAKE_CURRENT_SOURCE_DIR}/src/main.c
 )
 #

@@ -57,13 +57,6 @@ static FATFS fat_fs;
 static BYTE buff[4096]; // todo size?
 // eject state
 static bool ejected = false;
-// static files
-static S_FILE static_files[1] = {
-        {
-                .name    = "welcome.txt",
-                .content = "Hello, World!\r\n"
-        }
-};
 
 //PARTITION VolToPart[FF_VOLUMES] = {
 //        {0, 1},    /* "0:" ==> ram drive in PD#0 */
@@ -71,8 +64,8 @@ static S_FILE static_files[1] = {
 //};
 
 //-----------------------------------------------------------------------------
-
-bool disk_prepare() {
+// todo type & flash
+bool disk_prepare(DISK_TYPE type, S_FILE files[]) {
     FRESULT res;
     FIL fil;
     UINT bw;
@@ -88,26 +81,26 @@ bool disk_prepare() {
         if (res == FR_OK) {
             // set device label
             res = f_setlabel(DEV_USB_VID);
-            if (res == FR_OK) {
+//            if (res == FR_OK) {
                 // crete device dir
-                res = f_mkdir(DEV_DEV_DIR);
-                if (res == FR_OK) {
-                    // create GPIO folders
-                    for (int i = 0; i < 29; i++) {
-                        char str_buf[256];
-                        sprintf (str_buf, "%s%d", DEV_GPIO_TMP, i);
-                        f_mkdir(str_buf);
-                        f_chmod(str_buf, AM_RDO | AM_SYS, AM_RDO | AM_SYS);
-                    }
-                    // create  boot file, for restart
-                    f_open(&fil, DEV_BOOT_FILE, FA_CREATE_NEW | FA_WRITE);
-                    f_close(&fil);
-                }
+//                res = f_mkdir(DEV_DEV_DIR);
+//                if (res == FR_OK) {
+//                    // create GPIO folders
+//                    for (int i = 0; i < 29; i++) {
+//                        char str_buf[256];
+//                        sprintf (str_buf, "%s%d", DEV_GPIO_TMP, i);
+//                        f_mkdir(str_buf);
+//                        f_chmod(str_buf, AM_RDO | AM_SYS, AM_RDO | AM_SYS);
+//                    }
+//                    // create  boot file, for restart
+//                    f_open(&fil, DEV_BOOT_FILE, FA_CREATE_NEW | FA_WRITE);
+//                    f_close(&fil);
+//                }
                 // copy files - todo
                 if (res == FR_OK) {
                     // create all files need
-                    for (int i = 0; i < array_size(static_files); i++) {
-                        S_FILE file = static_files[i];
+                    for (int i = 0; i < array_size(&files); i++) {
+                        S_FILE file = files[i];
                         res = f_open(&fil, file.name, FA_CREATE_NEW | FA_WRITE);
                         if (res == FR_OK) {
                             f_write(&fil, file.content, strlen(file.content), &bw);
@@ -115,7 +108,7 @@ bool disk_prepare() {
                         }
                     }
                 }
-            }
+//            }
             // unmount
             f_mount(0, "", 0);
         }
@@ -255,6 +248,14 @@ int32_t tud_msc_scsi_cb(uint8_t lun, uint8_t const scsi_cmd[16], void *buffer, u
         }
     }
     return (int32_t) resp_len;
+}
+
+bool msc_disk_init(DISK_TYPE type, S_FILE files[] ) {
+    return disk_prepare(type, files);
+}
+
+void msc_disk_task() {
+    // no op yet
 }
 
 //-----------------------------------------------------------------------------

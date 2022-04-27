@@ -14,10 +14,7 @@
 #include "boot/boot.h"
 #include "hw/led.h"
 
-//-----------------------------------------------------------------------------
-
-static bool restart = false;
-static bool prepared = false;
+#include "fs_data.c"
 
 //-----------------------------------------------------------------------------
 
@@ -29,22 +26,31 @@ int main(void) {
     stdio_init_all();
     // custom board initialization
     target_board_init();
+    // init usb
+    tusb_init();
     // prepare ram/flash disk
-    prepared = disk_prepare();
-    // if all ok
-    if (prepared) {
-        tusb_init();
+    bool msc_disk_prepared = msc_disk_init(DISK_IN_RAM, static_files);
+    // check disk state
+    if (msc_disk_prepared) {
+        // ok nothing
         set_led_blink_interval(BLINK_NONE);
     } else {
+        // error start fast blinking
         set_led_blink_interval(BLINK_ERROR);
     }
-    while (!restart) {
-        if (prepared) {
-            tud_task();
-        }
-        led_task();
+    #pragma clang diagnostic push
+    #pragma ide diagnostic ignored "EndlessLoop"
+    while (true) {
+        // check boot sel button and reboot if pressed 500ms
         check_for_boot_sel_reset();
+        // tiny usb device task
+        tud_task();
+        // msc disk task
+        msc_disk_task();
+        // led task
+        led_task();
     }
+    #pragma clang diagnostic pop
 }
 
 //-----------------------------------------------------------------------------

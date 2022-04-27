@@ -188,7 +188,7 @@ fi
 echo "Preparing empty build dir."
 rm -rf build
 mkdir -p build
-#./create-data.sh
+./create-data.sh
 # go to build dir
 cd build || exit
 # prepare environment

@@ -24,13 +24,14 @@ then
        echo "Device in boot-sel mode, copying flash file..."
        cp JSPico.uf2  "$PICO_BOOTSEL_PATH/JSPico.uf2"
    else
-       echo "Device no in boot-sel mode, starting emulator..."
-       cp build/JSPico.hex libs/rp2040js/hello_uart.hex
-       cd libs/rp2040js
-       npm install
-       npm audit fix
-       npm start
-       cd ../..
+      echo "Device no in boot-sel mode, finish..."
+#       echo "Device no in boot-sel mode, starting emulator..."
+#       cp build/JSPico.hex libs/rp2040js/hello_uart.hex
+#       cd libs/rp2040js
+#       npm install
+#       npm audit fix
+#       npm start
+#       cd ../..
        #gdb localhost:3333
    fi
    echo "Done."
