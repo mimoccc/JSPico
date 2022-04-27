@@ -16,4 +16,8 @@ void led_task();
 
 void set_led_blink_interval(uint32_t blink_interval_ms);
 
+void led_on();
+
+void led_off();
+
 #endif //JSPICO_BLINK_H
