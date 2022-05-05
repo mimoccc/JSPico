@@ -1,18 +1,17 @@
 //-----------------------------------------------------------------------------
-// Board specific configuration
 //-----------------------------------------------------------------------------
 
-#include <stdlib.h>
-#include <stdint.h>
-#include <stdbool.h>
-#include "bsp/board.h"
-#include "board.h"
+#ifndef JSPICO_CONSOLE_H
+#define JSPICO_CONSOLE_H
 
 //-----------------------------------------------------------------------------
 
-//Initialize board
-void target_board_init() {
-    board_led_write(1);
-}
+void console_log_buff(char* buff, int size);
+
+void console_log(char *message);
+
+//-----------------------------------------------------------------------------
+
+#endif //JSPICO_CONSOLE_H
 
 //-----------------------------------------------------------------------------

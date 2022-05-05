@@ -1,12 +1,22 @@
-#include "flash.h"
+//-----------------------------------------------------------------------------
+// flash disk
+// a management to keep flash memory untouched when not needed and to keep
+// files unfragmented in memory, and also a paging for flash
+//-----------------------------------------------------------------------------
+
 #include <stdlib.h>
 #include <string.h>
 #include "hardware/flash.h"
 #include "hardware/sync.h"
 #include "pico/stdlib.h"
+#include "flash_disk.h"
 #include "board.h"
 
-//const uint8_t *flash_addr = (const uint8_t *) (XIP_BASE + ROM_FLASH_OFFSET);
+//-----------------------------------------------------------------------------
+
+const uint8_t *flash_addr = (const uint8_t *) (XIP_BASE + ROM_FLASH_OFFSET);
+
+//-----------------------------------------------------------------------------
 
 int flash_program(uint32_t sector, uint32_t offset, uint8_t *buffer, size_t size) {
     const uint32_t _base = ROM_FLASH_OFFSET + (sector * FLASH_SECTOR_SIZE) + offset;
@@ -24,6 +34,8 @@ int flash_program(uint32_t sector, uint32_t offset, uint8_t *buffer, size_t size
     return 0;
 }
 
+//-----------------------------------------------------------------------------
+
 int flash_erase(uint32_t sector, size_t count) {
     const uint32_t _base = ROM_FLASH_OFFSET + (sector * FLASH_SECTOR_SIZE);
     const uint32_t _size = count * FLASH_SECTOR_SIZE;
@@ -40,3 +52,5 @@ int flash_erase(uint32_t sector, size_t count) {
     restore_interrupts(saved_irq);
     return 0;
 }
+
+//-----------------------------------------------------------------------------

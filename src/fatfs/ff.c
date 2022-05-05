@@ -3531,19 +3531,14 @@ FRESULT f_mount (
 	LEAVE_FF(fs, res);
 }
 
-
-
-
 /*-----------------------------------------------------------------------*/
 /* Open or Create a File                                                 */
 /*-----------------------------------------------------------------------*/
-
 FRESULT f_open (
 	FIL* fp,			/* Pointer to the blank file object */
 	const TCHAR* path,	/* Pointer to the file name */
 	BYTE mode			/* Access mode and file open mode flags */
-)
-{
+) {
 	FRESULT res;
 	DIR dj;
 	FATFS *fs;
@@ -3552,10 +3547,7 @@ FRESULT f_open (
 	FSIZE_t ofs;
 #endif
 	DEF_NAMBUF
-
-
 	if (!fp) return FR_INVALID_OBJECT;
-
 	/* Get logical drive */
 	mode &= FF_FS_READONLY ? FA_READ : FA_READ | FA_WRITE | FA_CREATE_ALWAYS | FA_CREATE_NEW | FA_OPEN_ALWAYS | FA_OPEN_APPEND;
 	res = find_volume(&path, &fs, mode);

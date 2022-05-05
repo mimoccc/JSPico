@@ -1,12 +1,14 @@
 ####################################################################################################
 # Script that make image of fat from fs folder and generate c file with content
 ####################################################################################################
+DATA_DIRECTORY="fs"
 CREATE_FILE="src/fs_data.c"
 ####################################################################################################
 # clean stale file
 rm -rf $CREATE_FILE
 # create new empty
 touch $CREATE_FILE
+files_count=$(ls $DATA_DIRECTORY | wc -l)
 # print content
 echo "//--------------------------------------------------------------------------------------------------
 // Disc data from fs folder
@@ -22,13 +24,18 @@ echo "//------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
 
 // static files
-static S_FILE static_files[1] = {
-        {
-                .name    = \"welcome.txt\",
-                .content = \"Hello, World!\r\n\"
-        }
-};
+static S_FILE static_files[$files_count] = {" > $CREATE_FILE
+for file_path in $DATA_DIRECTORY/*
+do
+    file_name=$(basename $file_path)
+    file_data=$(cat $file_path | base64 -w 0)
+    echo "{
+        .name = \"$file_name\",
+        .content = \"$file_data\"
+    }," >> $CREATE_FILE
+done
+echo "};
 
-//--------------------------------------------------------------------------------------------------" > $CREATE_FILE
+//--------------------------------------------------------------------------------------------------" >> $CREATE_FILE
 echo "Data successfully created..."
 ####################################################################################################

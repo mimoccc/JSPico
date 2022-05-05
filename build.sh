@@ -43,6 +43,8 @@ TINYUSB_LIB_REPO="https://github.com/hathach/tinyusb.git"
 # uzlib lib
 #UZLIB_LIB="$LIBS_FOLDER/uzlib"
 #UZLIB_LIB_REPO="https://github.com/pfalcon/uzlib.git"
+#MJS_LIB="$LIBS_FOLDER/mjs"
+#MJS_LIB_REPO="https://github.com/cesanta/mjs.git"
 ####################################################################################################
 # MAIN
 ####################################################################################################
@@ -96,6 +98,17 @@ else
     git clone $TINYUSB_LIB_REPO --recurse-submodules
     cd "$OLD_DIR" || exit
 fi
+# Check library v7 javascript
+#if [ -d "$MJS_LIB" ]
+#then
+#    echo "Library mjs - OK."
+#else
+#    echo "Downloading library mjs."
+#    OLD_DIR=$(pwd)
+#    cd "$LIBS_FOLDER" || exit
+#    git clone $MJS_LIB_REPO --recurse-submodules
+#    cd "$OLD_DIR" || exit
+#fi
 # Check library freertos
 #if [ -d "$FREERTOS_LIB" ]
 #then

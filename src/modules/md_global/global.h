@@ -1,18 +1,15 @@
 //-----------------------------------------------------------------------------
-// Board specific configuration
 //-----------------------------------------------------------------------------
 
-#include <stdlib.h>
-#include <stdint.h>
-#include <stdbool.h>
-#include "bsp/board.h"
-#include "board.h"
+#ifndef JSPICO_GLOBAL_H
+#define JSPICO_GLOBAL_H
 
 //-----------------------------------------------------------------------------
 
-//Initialize board
-void target_board_init() {
-    board_led_write(1);
-}
+void delay(int millis);
+
+//-----------------------------------------------------------------------------
+
+#endif //JSPICO_GLOBAL_H
 
 //-----------------------------------------------------------------------------

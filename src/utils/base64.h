@@ -1,15 +1,19 @@
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
-#ifndef JSPICO_BOOT_H
-#define JSPICO_BOOT_H
+#ifndef JSPICO_BASE_64_H
+#define JSPICO_BASE_64_H
 
 //-----------------------------------------------------------------------------
 
-void check_for_boot_sel_reset();
+char *base64_encode(const unsigned char *data, size_t input_length, size_t *output_length);
 
 //-----------------------------------------------------------------------------
 
-#endif //JSPICO_BOOT_H
+unsigned char *base64_decode(const char *data, size_t input_length, size_t *output_length);
+
+//-----------------------------------------------------------------------------
+
+#endif //JSPICO_BASE_64_H
 
 //-----------------------------------------------------------------------------

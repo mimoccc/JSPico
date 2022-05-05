@@ -2,7 +2,7 @@
 // USB descriptors
 //-----------------------------------------------------------------------------
 #include "tusb.h"
-#include "board.h"
+//#include "board.h"
 
 #define _PID_MAP(itf, n)  ((CFG_TUD_##itf) << (n))
 #define USB_PID (0x4000 | _PID_MAP(CDC, 0) |\

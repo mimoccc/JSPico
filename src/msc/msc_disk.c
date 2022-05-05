@@ -2,21 +2,23 @@
 // Mass storage disc
 //-----------------------------------------------------------------------------
 
-#include "bsp/board.h"
+//#include "bsp/board.h"
 #include "tusb.h"
-#include "pico/stdlib.h"
-#include "hardware/flash.h"
-#include "flash/flash.h"
+//#include "pico/stdlib.h"
+//#include "hardware/flash.h"
+//#include "flash/flash_disk.h"
 #include "board.h"
 #include <stdlib.h>
-#include <stdint.h>
+//#include <stdint.h>
 #include <stdbool.h>
-#include <stdio.h>
+//#include <stdio.h>
 #include <string.h>
 #include <time.h>
 #include "fatfs/ff.h"
-#include "diskio.h"
+//#include "diskio.h"
 #include "msc_disk.h"
+#include "utils/base64.h"
+#include "main.h"
 
 //-----------------------------------------------------------------------------
 #if CFG_TUD_MSC
@@ -42,47 +44,39 @@ extern WORD ld_word(const BYTE *ptr);            /* Load a 2-byte little-endian 
 extern void st_word(BYTE *ptr, WORD val);        /* Store a 2-byte word in little-endian */
 extern void st_dword(BYTE *ptr, DWORD val);        /* Store a 4-byte word in little-endian */
 
-static bool mounted = false;
-static bool suspended = true;
-
-#define array_size(arr)  (sizeof(arr) / sizeof(arr[0]))
-
-// ramdisc
-BYTE *ram_disk;
-// ramdisc size
-DWORD ram_disk_size;
-// fat fs
-static FATFS fat_fs;
-// buffer
-static BYTE buff[4096]; // todo size?
-// eject state
-static bool ejected = false;
-
-//PARTITION VolToPart[FF_VOLUMES] = {
-//        {0, 1},    /* "0:" ==> ram drive in PD#0 */
-//        {1, 0}     /* "1:" ==> flash drive PD#1 */
-//};
+extern bool mounted;
+extern bool suspended;
+extern BYTE *ram_disk;
+extern DWORD ram_disk_size;
+extern FATFS fat_fs;
+extern bool ejected;
+extern unsigned char buff[DISK_BLOCK_SIZE];
 
 //-----------------------------------------------------------------------------
 // todo type & flash
-bool disk_prepare(DISK_TYPE type, S_FILE files[]) {
+bool disk_prepare(DISK_TYPE type, S_FILE files[], int file_cnt) {
     FRESULT res;
     FIL fil;
+    FILINFO fno;
     UINT bw;
-    ram_disk_size = DISK_SIZE_KB * 2;
-    // create filesystem
-//    DWORD plist[] = {100, 0};
-//    res = f_fdisk(0, plist, buff);
-//    res = f_mkfs("0:", FM_FAT | FM_FAT32 | FM_SFD, DISK_BLOCK_SIZE, buff, sizeof buff);
-    res = f_mkfs("", FM_FAT | FM_FAT32 | FM_SFD, DISK_BLOCK_SIZE, buff, sizeof buff);
-    if (res == FR_OK) {
-        // mount filesystem
-        res = f_mount(&fat_fs, "", 0);
+    // try to mount already existing fs
+    res = f_mount(&fat_fs, "", 1);
+    // can not be mounted
+    if (res != FR_OK) {
+        // create new file system
+        res = f_mkfs("", FM_FAT | FM_FAT32 | FM_SFD, DISK_BLOCK_SIZE, buff, sizeof (buff));
+        // if success/created
         if (res == FR_OK) {
-            // set device label
-            res = f_setlabel(DEV_USB_VID);
+            // mount filesystem
+            res = f_mount(&fat_fs, "", 1);
+        }
+    }
+    // if one ok, mount or create
+    if (res == FR_OK) {
+        // set device label
+        res = f_setlabel(DEV_USB_VID);
 //            if (res == FR_OK) {
-                // crete device dir
+        // crete device dir
 //                res = f_mkdir(DEV_DEV_DIR);
 //                if (res == FR_OK) {
 //                    // create GPIO folders
@@ -96,24 +90,31 @@ bool disk_prepare(DISK_TYPE type, S_FILE files[]) {
 //                    f_open(&fil, DEV_BOOT_FILE, FA_CREATE_NEW | FA_WRITE);
 //                    f_close(&fil);
 //                }
-                // copy files - todo
-                if (res == FR_OK) {
-                    // create all files need
-                    for (int i = 0; i < array_size(&files); i++) {
-                        S_FILE file = files[i];
-                        res = f_open(&fil, file.name, FA_CREATE_NEW | FA_WRITE);
-                        if (res == FR_OK) {
-                            f_write(&fil, file.content, strlen(file.content), &bw);
-                            f_close(&fil);
-                        }
+        // check or copy files - todo
+        if (res == FR_OK) {
+            // create all files if need
+            for (int i = 0; i < file_cnt; i++) {
+                S_FILE file = files[i];
+                res = f_stat(file.name, &fno);
+                if (res != FR_OK) {
+                    res = f_open(&fil, file.name, FA_CREATE_NEW | FA_WRITE);
+                    if (res == FR_OK) {
+                        size_t decode_size = strlen(file.content);
+                        unsigned char * decoded_data = base64_decode(
+                                file.content,
+                                decode_size,
+                                &decode_size
+                                );
+                        f_write(&fil, decoded_data, decode_size, &bw);
+                        f_close(&fil);
+                        free(decoded_data);
                     }
                 }
-//            }
-            // unmount
-            f_mount(0, "", 0);
+            }
         }
     }
-    return res == 0;
+    // return result
+    return res == FR_OK;
 }
 
 //-----------------------------------------------------------------------------
@@ -122,26 +123,20 @@ void tud_mount_cb(void) {
     mounted = true;
 }
 
-//-----------------------------------------------------------------------------
-
 void tud_umount_cb(void) {
     mounted = false;
+    // umount disc
+    // f_mount(0, "", 0);
 }
-
-//-----------------------------------------------------------------------------
 
 void tud_suspend_cb(bool remote_wakeup_en) {
     (void) remote_wakeup_en;
     suspended = true;
 }
 
-//-----------------------------------------------------------------------------
-
 void tud_resume_cb(void) {
     suspended = false;
 }
-
-//-----------------------------------------------------------------------------
 
 void tud_msc_inquiry_cb(
         uint8_t lun,
@@ -155,8 +150,6 @@ void tud_msc_inquiry_cb(
     memcpy(product_rev, DEV_USB_REV, strlen(DEV_USB_REV));
 }
 
-//-----------------------------------------------------------------------------
-
 bool tud_msc_test_unit_ready_cb(uint8_t lun) {
     (void) lun;
     if (ejected) {
@@ -164,8 +157,6 @@ bool tud_msc_test_unit_ready_cb(uint8_t lun) {
     }
     return !ejected;
 }
-
-//-----------------------------------------------------------------------------
 
 void tud_msc_capacity_cb(uint8_t lun, uint32_t *block_count, uint16_t *block_size) {
     (void) lun;
@@ -192,38 +183,33 @@ bool tud_msc_start_stop_cb(uint8_t lun, uint8_t power_condition, bool start, boo
 
 //-----------------------------------------------------------------------------
 
-int32_t tud_msc_read10_cb(uint8_t lun, uint32_t lba, uint32_t offset, void *buffer, uint32_t bufsize) {
-    (void) lun;
-    board_led_write(0);
-    if (lba >= DISK_BLOCK_NUM) {
-        return -1;
-    }
-    memcpy(buffer, ram_disk + (DISK_BLOCK_SIZE * lba) + offset, bufsize);
-    board_led_write(1);
-    return (int32_t) bufsize;
-}
-
-//-----------------------------------------------------------------------------
-
 bool tud_msc_is_writable_cb(uint8_t lun) {
     (void) lun;
     return true;
 }
 
-//-----------------------------------------------------------------------------
-
-int32_t tud_msc_write10_cb(uint8_t lun, uint32_t lba, uint32_t offset, uint8_t *buffer, uint32_t bufsize) {
-    (void) lun;
-    board_led_write(0);
+// lun device num
+// lba start cluster
+// offset offset in cluster
+// buffer byte buffer
+// bufsize byte buffer size
+int32_t tud_msc_read10_cb(uint8_t lun, uint32_t lba, uint32_t offset, void *buffer, uint32_t bufsize) {
     if (lba >= DISK_BLOCK_NUM) {
         return -1;
     }
-    memcpy(ram_disk + (DISK_BLOCK_SIZE * lba) + offset, buffer, bufsize);
-    board_led_write(1);
+    memcpy(buffer, ram_disk + (DISK_BLOCK_SIZE * lba) + offset, bufsize);
+//    disk_read(0, buffer, lba, bufsize / DISK_BLOCK_SIZE); // todo offset
     return (int32_t) bufsize;
 }
 
-//-----------------------------------------------------------------------------
+int32_t tud_msc_write10_cb(uint8_t lun, uint32_t lba, uint32_t offset, uint8_t *buffer, uint32_t buffsize) {
+    if (lba >= DISK_BLOCK_NUM) {
+        return -1;
+    }
+    memcpy(ram_disk + (DISK_BLOCK_SIZE * lba) + offset, buffer, buffsize);
+    //disk_write(0, buffer, lba, buffsize); // todo offsett
+    return (int32_t) buffsize;
+}
 
 int32_t tud_msc_scsi_cb(uint8_t lun, uint8_t const scsi_cmd[16], void *buffer, uint16_t bufsize) {
     void const *response = NULL;
@@ -250,8 +236,8 @@ int32_t tud_msc_scsi_cb(uint8_t lun, uint8_t const scsi_cmd[16], void *buffer, u
     return (int32_t) resp_len;
 }
 
-bool msc_disk_init(DISK_TYPE type, S_FILE files[] ) {
-    return disk_prepare(type, files);
+bool msc_disk_init(DISK_TYPE type, S_FILE files[], int file_cnt) {
+    return disk_prepare(type, files, file_cnt);
 }
 
 void msc_disk_task() {

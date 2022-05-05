@@ -6,6 +6,7 @@
 #define JSPICO_CONFIG_H
 
 //-----------------------------------------------------------------------------
+
 // base config structure
 typedef struct {
     char* board_name;                      // board name exposed as USB msc device

@@ -7,6 +7,7 @@
 #include <time.h>
 #include "diskio.h"
 #include "ff.h"
+#include "board.h"
 
 //-----------------------------------------------------------------------------
 
