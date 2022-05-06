@@ -18,13 +18,13 @@ void task_js_task();
 
 //-----------------------------------------------------------------------------
 
-VTASK TASK_JS = {
+TASK TASK_JS = {
         .task_name = "js",
-        .parameters = NULL,
-        .priority = 1,
-        .stack_depth = 255,
+        .task_init_parameters = NULL,
         .task_init = &task_js_init,
-        .task_main = &task_js_task
+        .task_task_parameters = NULL,
+        .task_task = &task_js_task,
+        .priority = 2
 };
 
 //-----------------------------------------------------------------------------

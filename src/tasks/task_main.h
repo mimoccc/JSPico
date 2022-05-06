@@ -13,13 +13,13 @@ void task_main_task();
 
 //-----------------------------------------------------------------------------
 
-VTASK TASK_MAIN = {
+TASK TASK_MAIN = {
         .task_name = "main",
-        .parameters = NULL,
-        .priority = 1,
-        .stack_depth = 255,
+        .task_init_parameters = NULL,
         .task_init = &task_main_init,
-        .task_main = &task_main_task
+        .task_task_parameters = NULL,
+        .task_task = &task_main_task,
+        .priority = 1
 };
 
 //-----------------------------------------------------------------------------

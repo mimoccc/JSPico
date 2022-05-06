@@ -25,6 +25,7 @@ static critical_section_t cs;
 
 //-----------------------------------------------------------------------------
 
+// Critical section
 void critical_sec_init() {
     critical_section_init(&cs);
     critical_section_enter_blocking(&cs);
@@ -32,6 +33,7 @@ void critical_sec_init() {
 
 //-----------------------------------------------------------------------------
 
+// Critical section
 void critical_sec_done(){
     critical_section_exit(&cs);
     critical_section_deinit(&cs);
@@ -39,6 +41,7 @@ void critical_sec_done(){
 
 //-----------------------------------------------------------------------------
 
+// override boot-sel button
 void set_chip_select_override(const enum gpio_override override) {
     hw_write_masked(&ioqspi_hw->io[CS_PIN_INDEX].ctrl,
                     override << IO_QSPI_GPIO_QSPI_SS_CTRL_OEOVER_LSB,
@@ -47,6 +50,7 @@ void set_chip_select_override(const enum gpio_override override) {
 
 //-----------------------------------------------------------------------------
 
+// Button check
 bool __no_inline_not_in_flash_func(get_boot_sel_button)() {
     critical_sec_init();
     set_chip_select_override(GPIO_OVERRIDE_LOW);

@@ -22,8 +22,7 @@ set(PICO_TINYUSB_PATH ${CMAKE_SOURCE_DIR}/libs/tinyusb)
 set(BOARD_DIR ${CMAKE_CURRENT_LIST_DIR}/targets/${TARGET}/boards/${FAMILY})
 set(FATFS_DIR ${CMAKE_SOURCE_DIR}/src/fatfs)
 set (MODULES_DIR ${CMAKE_SOURCE_DIR}/src/modules)
-set (PICO_SDK_FREERTOS_SOURCE ${CMAKE_SOURCE_DIR}/libs/pico-sdk/lib/tinyusb/lib/FreeRTOS-Kernel)
-set(SOURCES ${SOURCES} ${BOARD_DIR} ${FATFS_DIR} ${MODULES_DIR} ${PICO_SDK_FREERTOS_SOURCE})
+set(SOURCES ${SOURCES} ${BOARD_DIR} ${FATFS_DIR} ${MODULES_DIR})
 # cmake include files
 include(${PICO_TINYUSB_PATH}/hw/bsp/family_support.cmake)
 include(${PICO_SDK_PATH}/pico_sdk_init.cmake)
@@ -37,19 +36,11 @@ family_initialize_project(${PROJECT} ${CMAKE_CURRENT_LIST_DIR})
 #
 add_executable(
         ${PROJECT}
-        ${CMAKE_SOURCE_DIR}/src/js/js.c
+#        ${CMAKE_SOURCE_DIR}/src/js/js.c
         ${BOARD_DIR}/board.c
 )
 #
 target_sources(${PROJECT} PUBLIC
-        ${PICO_SDK_FREERTOS_SOURCE}/event_groups.c
-        ${PICO_SDK_FREERTOS_SOURCE}/list.c
-        ${PICO_SDK_FREERTOS_SOURCE}/queue.c
-        ${PICO_SDK_FREERTOS_SOURCE}/stream_buffer.c
-        ${PICO_SDK_FREERTOS_SOURCE}/tasks.c
-        ${PICO_SDK_FREERTOS_SOURCE}/timers.c
-        ${PICO_SDK_FREERTOS_SOURCE}/portable/MemMang/heap_3.c
-        ${CMAKE_SOURCE_DIR}/src/freertos/port.c
         ${CMAKE_SOURCE_DIR}/src/utils/base64.c
         ${BOARD_DIR}/board.c
         ${FATFS_DIR}/ff.c
@@ -73,10 +64,7 @@ target_sources(${PROJECT} PUBLIC
         )
 #
 target_include_directories(${PROJECT} PUBLIC
-        ${PICO_SDK_FREERTOS_SOURCE}/include
-        ${CMAKE_SOURCE_DIR}/src/freertos
-        ${CMAKE_SOURCE_DIR}/src/tasks
-        ${PICO_SDK_FREERTOS_SOURCE}/portable/GCC/ARM_CM0
+        ${CMAKE_SOURCE_DIR}/src/log
         ${PICO_SDK_PATH}/src/rp2_common/pico_multicore/include
         ${TARGET_INC_DIR}
         ${BOARD_DIR}
@@ -91,7 +79,7 @@ target_include_directories(${PROJECT} PUBLIC
         ${CMAKE_SOURCE_DIR}/src/usb
         ${PICO_SDK_PATH}/src/rp2_common/hardware_flash/include
         ${PICO_SDK_PATH}/src/rp2_common/hardware_gpio/include
-        ${CMAKE_SOURCE_DIR}/src/log
+
         )
 #
 # add_subdirectory(src/freertos)

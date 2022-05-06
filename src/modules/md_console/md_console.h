@@ -30,8 +30,8 @@ JS_FNC CONSOLE_FUNCTIONS[] = {
 //-----------------------------------------------------------------------------
 
 JS_MODULE JS_CONSOLE = {
-        .mount_point = NULL,
         .name = "console",
+        .mount_point = NULL,
         .functions = CONSOLE_FUNCTIONS,
         .fnc_count = array_size(CONSOLE_FUNCTIONS)
 };

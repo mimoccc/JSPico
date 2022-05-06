@@ -25,8 +25,8 @@ JS_FNC FS_FUNCTIONS [] = {
 //-----------------------------------------------------------------------------
 
 JS_MODULE JS_FS = {
-        .mount_point = NULL,
         .name = "fs",
+        .mount_point = NULL,
         .functions = FS_FUNCTIONS,
         .fnc_count = array_size(FS_FUNCTIONS)
 };

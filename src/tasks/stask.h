@@ -14,19 +14,21 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "FreeRTOS.h"
-#include "task.h"
 
 //-----------------------------------------------------------------------------
 
+typedef void (*TASK_FNC)(void *);
+
 typedef struct {
-    TaskFunction_t task_init;
-    TaskFunction_t task_main;
-    char* task_name;
-    configSTACK_DEPTH_TYPE stack_depth;
-    void* parameters;
-    UBaseType_t priority;
-} VTASK;
+    char *task_name;            // task name
+    void *task_init_parameters; // params for initialize function
+    TASK_FNC task_init;         // pointer to function that initialize task
+    void *task_task_parameters; // task cycle parameters
+    TASK_FNC task_task;         // pointer to task loop function
+    uint32_t schedule_ms;       // next task cycle function run schedule
+    uint8_t priority;           // task priority 1-max 255 - min
+    bool sleep;                 // task is halted, sleeping
+} TASK;
 
 //-----------------------------------------------------------------------------
 

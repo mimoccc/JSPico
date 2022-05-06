@@ -21,6 +21,7 @@
 //#include "diskio.h"
 #include "msc_disk.h"
 #include "utils/base64.h"
+#include "tasks/stask.h"
 
 //-----------------------------------------------------------------------------
 
@@ -35,6 +36,9 @@ extern DWORD ram_disk_size;
 extern FATFS fat_fs;
 extern bool ejected;
 extern unsigned char buff[DISK_BLOCK_SIZE];
+extern int currentTaskIdx;
+extern TASK* TASKS[];
+extern void nextTask();
 
 //-----------------------------------------------------------------------------
 

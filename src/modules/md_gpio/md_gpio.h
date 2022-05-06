@@ -25,8 +25,8 @@ JS_FNC GPIO_FUNCTIONS[] = {
 //-----------------------------------------------------------------------------
 
 JS_MODULE JS_GPIO = {
-        .mount_point = NULL,
         .name = "gpio",
+        .mount_point = NULL,
         .functions = GPIO_FUNCTIONS,
         .fnc_count = array_size(GPIO_FUNCTIONS)
 };

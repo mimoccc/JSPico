@@ -15,8 +15,6 @@
 #include "js.h"
 #include "fatfs/ff.h"
 #include "js_modules.h"
-#include "FreeRTOS.h"
-#include "task.h"
 #include "main.h"
 
 //-----------------------------------------------------------------------------
@@ -180,24 +178,13 @@ void task_js_init() {
 //-----------------------------------------------------------------------------
 
 void task_js_task() {
-    tlog("JS task is really started.");
-    // small delay before loop
-    vTaskDelay(10);
-    // task loop
-    while (!reboot) {
-        // log
-        slog("Starting method %s.", JS_LOOP_METHOD);
-        // evaluate
-        jsval_t res = js_eval(js, JS_LOOP_METHOD);
-        // check result
-        if (res == T_ERR) {
-            slog("Starting method %s - error.", JS_LOOP_METHOD);
-            set_led_blink_interval(BLINK_ERROR);
-            break;
-        } else {
-            slog("Starting method %s - OK.", JS_LOOP_METHOD);
-            set_led_blink_interval(BLINK_NONE);
-        }
+    tlog("JS task cycle called.");
+    jsval_t res = js_eval(js, JS_LOOP_METHOD);
+    if (res == T_ERR) {
+        slog("Method %s - error.", JS_LOOP_METHOD);
+        set_led_blink_interval(BLINK_ERROR);
+    } else {
+        set_led_blink_interval(BLINK_NONE);
     }
 }
 

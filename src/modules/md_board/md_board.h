@@ -40,8 +40,8 @@ JS_FNC BOARD_FUNCTIONS[] = {
 //-----------------------------------------------------------------------------
 
 JS_MODULE JS_BOARD = {
-        .mount_point = NULL,
         .name = "board",
+        .mount_point = NULL,
         .functions = BOARD_FUNCTIONS,
         .fnc_count = array_size(BOARD_FUNCTIONS)
 };

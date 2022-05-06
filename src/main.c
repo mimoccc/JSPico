@@ -3,8 +3,6 @@
 //-----------------------------------------------------------------------------
 
 #include <pico/stdlib.h>
-#include "FreeRTOS.h"
-#include "task.h"
 #include "bsp/board.h"
 #include "tusb.h"
 #include "board.h"
@@ -14,9 +12,10 @@
 #include "js.h"
 #include "log/log.h"
 #include "fatfs/ff.h"
-#include "tasks/tasks.h"
-#include "tasks/task_main.h"
+#include "tasks/stask.h"
 #include "tasks/task_js.h"
+#include "tasks/task_main.h"
+#include "boot/boot.h"
 
 //-----------------------------------------------------------------------------
 
@@ -25,15 +24,61 @@ bool suspended = true;
 bool reboot = false;
 bool ejected = false;
 
-TaskHandle_t *t_handle;
-
 struct js *js;
 char *js_buff;
-
 BYTE *ram_disk;
 DWORD ram_disk_size = DISK_SIZE_KB * 2;
 FATFS fat_fs;
 unsigned char buff[DISK_BLOCK_SIZE] = {};
+TASK *TASKS[] = {
+        &TASK_MAIN,
+        &TASK_JS
+};
+int currentTaskIdx = 0;
+
+/**
+ * Initialize all task at once
+ */
+void initTasks() {
+    // task count
+    const int task_count = sizeof(TASKS) / sizeof(TASK *);
+    // Initialize all tasks one, to next
+    for (int t1 = 0; t1 < task_count; t1++) {
+        char *name = TASKS[t1]->task_name;
+        slog("Initializing task : %s.", name);
+        TASKS[t1]->task_init(TASKS[t1]->task_init_parameters);
+    }
+}
+
+// call next scheduled task in cycle
+void nextTask() {
+    // task count
+    const int task_count = sizeof(TASKS) / sizeof(TASK *);
+    // check task index and reset if over
+    if (currentTaskIdx >= task_count) currentTaskIdx = 0;
+    // current task
+    TASK *currentTask = TASKS[currentTaskIdx];
+    // if task is not in sleep
+    if (!currentTask->sleep) {
+        // current board millis
+        uint32_t bd_millis = board_millis();
+        // scheduled task millis
+        uint32_t t_millis = currentTask->schedule_ms;
+        // current task priority
+        uint16_t t_priority = currentTask->priority + 1; // min 1
+        // if task is about to be runned
+        if (bd_millis >= t_millis) {
+            // start current task
+            currentTask->task_task(currentTask->task_task_parameters);
+            // next schedule
+            t_millis = board_millis() + (t_priority * 10);
+            // set back to tasks
+            currentTask->schedule_ms = t_millis;
+        }
+        // increment index of task
+        currentTaskIdx = currentTaskIdx + 1;
+    }
+}
 
 int main(void) {
     // set blink when loading
@@ -63,32 +108,15 @@ int main(void) {
         tlog("Virtual file system prepared.");
         // Get tasks and allocate handles
         tlog("Starting main application thread.");
-        const int task_count = sizeof(TASKS) / sizeof(VTASK *);
-        t_handle = malloc((task_count+2) * sizeof(VTASK));
-        // Initialize all tasks one, to next
-        for (int t1 = 0; t1 < task_count; t1++) {
-            char *name = TASKS[t1]->task_name;
-            slog("Initializing task : %s.", name);
-            TASKS[t1]->task_init(NULL);
-        }
-        // Create task routines, start as subtasks in freertos
-        for (int t2 = 0; t2 < task_count; t2++) {
-            char *name = TASKS[t2]->task_name;
-            slog("Starting task : %s.", name);
-            xTaskCreate(
-                    TASKS[t2]->task_main,
-                    TASKS[t2]->task_name,
-                    TASKS[t2]->stack_depth,
-                    TASKS[t2]->parameters,
-                    TASKS[t2]->priority,
-                    &t_handle[t2]
-            );
-            slog("Task : %s started.", name);
-        }
-        vTaskStartScheduler();
+        initTasks();
         // Keep going until restart
         while (!reboot) {
-            // should only get here if there is insufficient RAM
+            // check boot sel button and reboot if pressed 500ms
+            check_for_boot_sel_reset();
+            // tiny usb device task
+            tud_task();
+            // run next task from tasks
+            nextTask();
         }
     } else {
         // error start fast blinking
@@ -97,7 +125,6 @@ int main(void) {
     tlog("-------------------------------------------------------------------------------");
     tlog("Rebooting...");
     tlog("-------------------------------------------------------------------------------");
-    free(t_handle);
     free(js);
     free(js_buff);
     free(ram_disk);
