@@ -1,10 +1,18 @@
 let config = {
+    // Manufacturer for usb device
+    board_manufacturer  : "MJDev",
+    // usb device product
+    board_product       : "JSPico",
+    // board serial number
+    board_serial_number : "123456789012",
     // Device name when mounted as usb flash storage
     board_name: "JSPico",
     // start state of led
     board_led_state: 1,
     // enable / disable flash msc
     board_usb_msc_enabled: true,
+    // enable / disable files editing
+    board_usb_msc_read_only: false,
     // enable / disable cdc
     board_usb_cdc_enabled: true,
     // enable / disable gpio to file mapping

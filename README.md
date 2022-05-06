@@ -13,13 +13,16 @@ Should also implement modules that can extend javascript core.
 
 Base (mass storage) vfs structure :
 
-Mass storage structure :
+Base mass storage structure :
 
-- device.cfg    device configuration and properties
+- board-cfg.js  device configuration and properties
 - index.js      base boot file (runned when device boot up)
-- libs          folder containing js libraries
+
+aditional (can be removed):
+
 - index.html    file shown thru web server as first page
 - gpio          folder to access gpio pins
+- libs          folder containing js libraries
 
 Build :
 

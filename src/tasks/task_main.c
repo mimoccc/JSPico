@@ -18,7 +18,7 @@ void task_main_init() {
 //-----------------------------------------------------------------------------
 
 void task_main_task() {
-    tlog("Main task cycle called.");
+//    tlog("Main task cycle called.");
     // msc disk task
     msc_disk_task();
     // led task

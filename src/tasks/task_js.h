@@ -24,7 +24,7 @@ TASK TASK_JS = {
         .task_init = &task_js_init,
         .task_task_parameters = NULL,
         .task_task = &task_js_task,
-        .priority = 2
+        .priority = 1
 };
 
 //-----------------------------------------------------------------------------

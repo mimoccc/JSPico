@@ -178,7 +178,7 @@ void task_js_init() {
 //-----------------------------------------------------------------------------
 
 void task_js_task() {
-    tlog("JS task cycle called.");
+//    tlog("JS task cycle called.");
     jsval_t res = js_eval(js, JS_LOOP_METHOD);
     if (res == T_ERR) {
         slog("Method %s - error.", JS_LOOP_METHOD);

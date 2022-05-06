@@ -15,7 +15,7 @@
 #include <string.h>
 #include <time.h>
 #include "fatfs/ff.h"
-//#include "diskio.h"
+#include "diskio.h"
 #include "msc_disk.h"
 #include "utils/base64.h"
 #include "main.h"
@@ -207,7 +207,7 @@ int32_t tud_msc_write10_cb(uint8_t lun, uint32_t lba, uint32_t offset, uint8_t *
         return -1;
     }
     memcpy(ram_disk + (DISK_BLOCK_SIZE * lba) + offset, buffer, buffsize);
-    //disk_write(0, buffer, lba, buffsize); // todo offsett
+//    disk_write(0, buffer, lba, buffsize); // todo offsett
     return (int32_t) buffsize;
 }
 
