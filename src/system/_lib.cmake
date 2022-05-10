@@ -1,0 +1,6 @@
+set(LIB_NAME system)
+set(LIB_PATH ${CMAKE_SOURCE_DIR}/src/system)
+add_library(${LIB_NAME} INTERFACE)
+target_sources(${LIB_NAME} INTERFACE ${LIB_PATH}/JSPico.cpp)
+target_include_directories(${LIB_NAME} INTERFACE ${LIB_PATH})
+target_link_libraries(${PROJECT_NAME} ${LIB_NAME})

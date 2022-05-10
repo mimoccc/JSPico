@@ -1,0 +1,6 @@
+set(LIB_NAME task_boot_sel)
+set(LIB_PATH ${CMAKE_SOURCE_DIR}/src/task_boot_sel)
+add_library(${LIB_NAME} INTERFACE)
+target_sources(${LIB_NAME} INTERFACE ${LIB_PATH}/BootSelTask.cpp)
+target_include_directories(${LIB_NAME} INTERFACE ${LIB_PATH})
+target_link_libraries(${PROJECT_NAME} ${LIB_NAME})

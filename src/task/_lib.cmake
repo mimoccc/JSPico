@@ -1,0 +1,7 @@
+set(LIB_NAME task)
+set(LIB_PATH ${CMAKE_SOURCE_DIR}/src/task)
+add_library(${LIB_NAME} INTERFACE)
+target_sources(${LIB_NAME} INTERFACE ${LIB_PATH}/Task.cpp)
+target_sources(${LIB_NAME} INTERFACE ${LIB_PATH}/TaskManager.cpp)
+target_include_directories(${LIB_NAME} INTERFACE ${LIB_PATH})
+target_link_libraries(${PROJECT_NAME} ${LIB_NAME})

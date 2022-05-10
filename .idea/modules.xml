@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/JSPico.iml" filepath="$PROJECT_DIR$/.idea/JSPico.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/JSPico2.iml" filepath="$PROJECT_DIR$/.idea/JSPico2.iml" />
     </modules>
   </component>
 </project>
