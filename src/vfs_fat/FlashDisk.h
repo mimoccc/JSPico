@@ -3,7 +3,7 @@
 
 #include "Device.h"
 
-static char const *FLASH = "FLASH";
+static char const *FLASH = "NAND";
 
 class FlashDisk : public Device {
 public:

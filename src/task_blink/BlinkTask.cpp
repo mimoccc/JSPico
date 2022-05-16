@@ -1,8 +1,7 @@
 #include "Task.h"
+#include "TaskArgs.h"
 #include "BlinkTask.h"
-
-static const uint BOARD_LED = 25;
-static char const *BLINK_TASK_NAME = "blink_task";
+#include "BlinkTaskArgs.h"
 
 BlinkTask::BlinkTask(uint blink_delay) : Task(BLINK_TASK_NAME, 1) {
     this->blink_delay = blink_delay;
@@ -41,4 +40,10 @@ bool BlinkTask::ledState() {
     gpio_set_dir(BOARD_LED, GPIO_IN);
     bool state = gpio_get(BOARD_LED);
     return state;
+}
+
+bool BlinkTask::setArgs(TaskArgs *args) {
+    auto* a = (BlinkTaskArgs *) args;
+    this->blink_delay = a->blinkDelayMs;
+    return false;
 }

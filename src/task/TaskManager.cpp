@@ -1,12 +1,18 @@
 #include "Task.h"
 #include "TaskManager.h"
 
-TaskManager::TaskManager() {
-    taskIndex = 0;
-}
+uint32_t TaskManager::taskIndex = 0;
+std::vector<Task *> TaskManager::tasks = {};
+std::vector<TaskArgs *> TaskManager::task_args = {};
+
+TaskManager::TaskManager() = default;
 
 void TaskManager::operator+=(Task *task) {
     tasks.push_back(task);
+}
+
+void TaskManager::operator+=(TaskArgs *taskArgs) {
+    task_args.push_back(taskArgs);
 }
 
 size_t TaskManager::size() {
@@ -37,6 +43,10 @@ bool TaskManager::processNextTask() {
         Task *t = tasks.at(taskIndex);
         if (t->isInitialized()) {
             if (t->isScheduledTime()) {
+                TaskArgs *task_a = findTaskArgs(t->task_name);
+                if (task_a != nullptr) {
+                    t->setArgs(task_a);
+                }
                 t->proc();
             }
         } else {
@@ -52,4 +62,23 @@ bool TaskManager::processNextTask() {
 
 TaskManager::~TaskManager() {
     clear();
+}
+
+bool TaskManager::addTaskArgs(TaskArgs *args) {
+    task_args.push_back(args);
+    return true;
+}
+
+TaskArgs *TaskManager::findTaskArgs(const char *name) {
+    if (task_args.empty()) {
+        return nullptr;
+    } else {
+        for (auto tArgs: task_args) {
+            if (strncmp(name, tArgs->destination, strlen(name)) != 0) {
+                remove(task_args.begin(), task_args.end(), tArgs);
+                return tArgs;
+            }
+        }
+        return nullptr;
+    }
 }

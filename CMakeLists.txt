@@ -12,13 +12,6 @@ IF(NOT IS_DIRECTORY ${PICO_SDK_DIR})
     )
 endif()
 
-set(OOFATFS_DIR ${CMAKE_SOURCE_DIR}/oofatfs)
-IF(NOT IS_DIRECTORY ${OOFATFS_DIR})
-execute_process(
-        COMMAND git clone https://github.com/micropython/oofatfs.git ${OOFATFS_DIR} --recurse-submodules
-)
-endif()
-
 set(TINYUSB_DIR ${CMAKE_SOURCE_DIR}/tinyusb)
 IF(NOT IS_DIRECTORY ${TINYUSB_DIR})
 execute_process(
@@ -32,6 +25,20 @@ execute_process(
         COMMAND git clone https://git.savannah.nongnu.org/git/lwip.git ${LWIP_DIR} --recurse-submodules
 )
 endif()
+
+# compiler
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(PICO_ENABLE_CXX_EXCEPTIONS 1)
+
+find_program(CCACHE_FOUND ccache)
+if(CCACHE_FOUND)
+    message(STATUS "CCache found. CCache will be used to cache project files.")
+    set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE ccache)
+endif()
+
+# just build type message
+message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 
 # project details
 set(PROJECT_NAME "JSPico")
@@ -79,6 +86,9 @@ pico_add_extra_outputs(${PROJECT_NAME})
 
 # compile definitions
 target_compile_definitions(${PROJECT_NAME} PRIVATE PICO_ENTER_USB_BOOT_ON_EXIT=1)
+
+#target_compile_options (${PROJECT_NAME} PUBLIC -fexceptions)
+#target_compile_options (${PROJECT_NAME} PUBLIC -frtti)
 
 # Enable USB serial
 #pico_enable_stdio_semihosting(${PROJECT_NAME} 1)

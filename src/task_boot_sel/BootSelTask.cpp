@@ -1,10 +1,11 @@
 #include "Task.h"
+#include "TaskManager.h"
+#include "TaskArgs.h"
 #include "BootSelTask.h"
+#include "BlinkTaskArgs.h"
 
-static char const *BOOT_SEL_TASK_NAME = "boot_sel_task";
-
-BootSelTask::BootSelTask(uint button_delay) : Task(BOOT_SEL_TASK_NAME, 1) {
-    this->button_delay = button_delay;
+BootSelTask::BootSelTask(uint button_delay_ms) : Task(BOOT_SEL_TASK_NAME, 1) {
+    this->button_delay = button_delay_ms;
 }
 
 BootSelTask::~BootSelTask() {
@@ -49,7 +50,7 @@ bool BootSelTask::get_boot_sel_button() {
 
 void BootSelTask::check_for_boot_sel_reset() {
     if (get_boot_sel_button()) {
-        sleep_ms(500);
+        sleep_ms(this->button_delay);
         if (get_boot_sel_button()) {
             reset_usb_boot(0, 0);
         }

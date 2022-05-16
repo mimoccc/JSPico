@@ -1,5 +1,5 @@
-#ifndef JS_PICO_FILESYSTEM_H
-#define JS_PICO_FILESYSTEM_H
+#ifndef JS_PICO_FILE_SYSTEM_H
+#define JS_PICO_FILE_SYSTEM_H
 
 #include <pico/bootrom.h>
 #include <pico/stdlib.h>
@@ -13,29 +13,39 @@
 #include <cstring>
 #include <vector>
 
+#include "ffconf.h"
+#include "ff.h"
+#include "diskio.h"
+
 class FileSystem {
 public:
-    std::vector<Device *> devices = {};
+    static std::vector<Device *> devices;
 
-    void onTudResume();
+    FileSystem();
 
-    void onTudSuspend(bool b);
+    ~FileSystem();
 
-    void onTudMount();
+    static void onTudResume();
 
-    void onTudUmount();
+    static void onTudSuspend(bool vanWakeUp);
 
-    void addDevice(Device *device);
+    static void onTudMount();
 
-    void getDeviceVendor(uint8_t devIndex, uint8_t *buffer);
+    static void onTudUmount();
 
-    void getDeviceProduct(uint8_t devIndex, uint8_t *buffer);
+    static void addDevice(Device *device);
 
-    void getDeviceRevision(uint8_t devIndex, uint8_t *buffer);
+    static uint16_t deviceCount();
 
-    bool isDeviceReady(uint8_t devIndex);
+    static void getDeviceVendor(uint8_t devIndex, uint8_t *buffer);
 
-    bool isDeviceReadOnly(uint8_t devIndex);
+    static void getDeviceProduct(uint8_t devIndex, uint8_t *buffer);
+
+    static void getDeviceRevision(uint8_t devIndex, uint8_t *buffer);
+
+    static bool isDeviceReady(uint8_t devIndex);
+
+    static bool isDeviceReadOnly(uint8_t devIndex);
 };
 
-#endif //JS_PICO_FILESYSTEM_H
+#endif //JS_PICO_FILE_SYSTEM_H

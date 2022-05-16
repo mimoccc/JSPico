@@ -8,35 +8,29 @@
 #include "FlashDisk.h"
 #include "RamDisk.h"
 
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wwritable-strings"
-
-
-#pragma clang diagnostic pop
-
 // init device
 void JSPico::init() {
     stdio_init_all();
-
     // create base file system
     fileSystem = new FileSystem();
-    // add flash device
-    fileSystem->addDevice(new FlashDisk());
-    // add ram device
-    fileSystem->addDevice(new RamDisk());
-
     // init task manager
     taskManager = new TaskManager();
+
+    // add flash device
+//    fileSystem->addDevice(new FlashDisk());
+    // add ram device
+    FileSystem::addDevice(new RamDisk());
+
     // enable reboot by pressing boot sel button
-    taskManager->addTask(new BootSelTask(500));
+    TaskManager::addTask(new BootSelTask(500));
     // blinking task used as state identification
-    taskManager->addTask(new BlinkTask(1000));
+    TaskManager::addTask(new BlinkTask(1000));
     // web server task
-    taskManager->addTask(new WebServerTask());
+    TaskManager::addTask(new WebServerTask());
 }
 
 // Start main process
-void JSPico::start() const {
+void JSPico::start() {
     while (taskManager->isNotEmpty()) {
         taskManager->processNextTask();
     }
@@ -44,7 +38,7 @@ void JSPico::start() const {
 }
 
 // Reboot device
-void JSPico::reboot() const {
+void JSPico::reboot() {
     // just clear all tasks, which continues to reboot
     taskManager->clear();
 }
@@ -52,26 +46,4 @@ void JSPico::reboot() const {
 // Reboot device to recovery / flashing
 void JSPico::rebootRecovery() {
     reset_usb_boot(0, 0);
-}
-
-// Invoked when device is mounted
-void JSPico::onTudMount() const {
-    fileSystem->onTudMount();
-}
-
-// Invoked when device is unmounted
-void JSPico::onTudUmount() const {
-    fileSystem->onTudUmount();
-}
-
-// Invoked when usb bus is suspended
-// remote_wakeup_en : if host allow us  to perform remote wakeup
-// Within 7ms, device must draw an average of current less than 2.5 mA from bus
-void JSPico::onTudSuspend(bool remoteWakeUpEn) const {
-    fileSystem->onTudSuspend(remoteWakeUpEn);
-}
-
-// Invoked when usb bus is resumed
-void JSPico::onTudResume() const {
-    fileSystem->onTudResume();
 }

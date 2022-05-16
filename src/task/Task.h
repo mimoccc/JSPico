@@ -9,6 +9,8 @@
 #include <cstdlib>
 #include <cstring>
 
+#include "TaskArgs.h"
+
 class Task {
 public:
     const char *task_name;      // task name
@@ -25,11 +27,15 @@ public:
 
     void delay(uint delay);
 
+    bool isInitialized() const;
+
+    static bool postArgs(TaskArgs *args);
+
     virtual void init();
 
     virtual void proc();
 
-    bool isInitialized() const;
+    virtual bool setArgs(TaskArgs *args);
 };
 
 #endif //JS_PICO_TASK_H

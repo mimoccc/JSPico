@@ -4,6 +4,10 @@
 #include "pico/stdlib.h"
 
 #include "Task.h"
+#include "TaskArgs.h"
+
+static const uint BOARD_LED = 25;
+static char const *BLINK_TASK_NAME = "blink_task";
 
 class BlinkTask : public Task {
 private:
@@ -18,11 +22,13 @@ public:
 
     void proc() override;
 
-    void ledOn();
+    static void ledOn();
 
-    void ledOff();
+    static void ledOff();
 
-    bool ledState();
+    static bool ledState();
+
+    bool setArgs(TaskArgs *args);
 };
 
 #endif //JS_PICO_BLINK_TASK_H

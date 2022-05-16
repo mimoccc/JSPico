@@ -13,21 +13,11 @@ public:
 
     void init();
 
-    void start() const;
+    void start();
 
-    void reboot() const;
+    void reboot();
 
     static void rebootRecovery();
-
-    void onTudMount() const;
-
-    void onTudUmount() const;
-
-    void onTudSuspend(bool b) const;
-
-    void onTudResume() const;
-
-    uint8_t getDeviceCount();
 };
 
 #endif //JS_PICO_JS_PICO_H

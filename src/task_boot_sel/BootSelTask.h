@@ -12,12 +12,13 @@
 
 #include "Task.h"
 
+static char const *BOOT_SEL_TASK_NAME = "boot_sel_task";
 const uint CS_PIN_INDEX = 1;
 
 class BootSelTask : public Task {
 private:
     uint button_delay;
-    critical_section_t cs;
+    critical_section_t cs{};
 public:
     explicit BootSelTask(uint button_delay);
 

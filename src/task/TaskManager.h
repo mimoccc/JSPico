@@ -9,30 +9,38 @@
 #include <cstdlib>
 #include <cstring>
 #include <vector>
+#include <algorithm>
 
 #include "Task.h"
 
 class TaskManager {
 private:
-    uint32_t taskIndex;
-    std::vector<Task*>tasks ={};
+    static uint32_t taskIndex;
+    static std::vector<Task*>tasks;
+    static std::vector<TaskArgs*>task_args;
 public:
     TaskManager();
     ~TaskManager();
 
-    size_t size();
+    static size_t size();
 
-    void addTask(Task* task);
+    static void addTask(Task* task);
 
     void operator+=(Task* task);
 
-    bool isEmpty();
+    void operator+=(TaskArgs* task);
 
-    bool isNotEmpty();
+    static bool isEmpty();
 
-    void clear();
+    static bool isNotEmpty();
 
-    bool processNextTask();
+    static void clear();
+
+    static bool processNextTask();
+
+    static bool addTaskArgs(TaskArgs * args);
+
+    static TaskArgs *findTaskArgs(const char *name);
 };
 
 #endif //JS_PICO_TASK_MANAGER_H
